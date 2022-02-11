@@ -19,8 +19,14 @@ while True:
             pygame.quit()
             sys.exit()
     
-    p1.events(pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
-    p2.events(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
+    isP1Moving = p1.events(pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
+    isP2Moving = p2.events(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
+    
+    if isP1Moving: p1.handleTouchOtherPlayer(p2)
+    if isP2Moving: p2.handleTouchOtherPlayer(p1)
+
+    ball.hadlePlayerTouch(p1)
+    ball.hadlePlayerTouch(p2)
     
 
     #Visuals
