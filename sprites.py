@@ -1,14 +1,16 @@
 import math
-from turtle import speed
 import pygame, consts
 
 class Player:
-    def __init__(self, x, y, radius, speed, color):
+    def __init__(self, x, y, radius, speed, color, kickSpeed):
         self.x = x
         self.y = y
         self.radius = radius
         self.speed = speed
         self.color = color
+        self.kickSpeed = kickSpeed
+
+        self.isMoving = False
         
 
     def draw (self, screen):
@@ -16,7 +18,9 @@ class Player:
 
 
     def handleTouchOtherPlayer(self, otherPlayer):
-        # verificar se Player tocou na bola:
+
+        if not self.isMoving: return
+
         minDist = self.radius + otherPlayer.radius
         dist = math.hypot(self.x - otherPlayer.x, self.y - otherPlayer.y)
         if dist <= minDist: # Jogador está tocando no outro jogador
@@ -26,10 +30,10 @@ class Player:
             newXD = minDist * xD/dist
             newYD = minDist * yD/dist
 
-            self.newPositionVerif(otherPlayer.x + newXD, otherPlayer.y + newYD)
+            self.updatePosition(otherPlayer.x + newXD, otherPlayer.y + newYD)
 
 
-    def newPositionVerif(self, newX, newY):
+    def updatePosition(self, newX, newY):
         if newX - self.radius < 0:
             self.x = self.radius
         elif newX + self.radius > consts.SCREEN_WIDTH:
@@ -47,130 +51,146 @@ class Player:
 
     def events (self, up, down, left, right):
 
-        isMoving = False
+        self.isMoving = False
         xInc,yInc = 0,0
 
         if pygame.key.get_pressed()[up]:
             yInc -= self.speed
-            isMoving = True
         if pygame.key.get_pressed()[down]:
             yInc += self.speed
-            isMoving = True
         if pygame.key.get_pressed()[left]:
             xInc -= self.speed
-            isMoving = True
         if pygame.key.get_pressed()[right]:
             xInc += self.speed
-            isMoving = True
 
+        if not (xInc==yInc==0):
+            self.isMoving = True
 
         if not (xInc==0 or yInc==0):
             xInc /= math.sqrt(2)
             yInc /= math.sqrt(2)
+        
 
 
-        self.newPositionVerif(self.x + xInc, self.y + yInc)
+        self.updatePosition(self.x + xInc, self.y + yInc)
 
-        return isMoving
 
 
 
 
 class Ball:
-    def __init__(self, x, y, radius, speed, color):
+    def __init__(self, x, y, radius, color, deceleration):
         self.x = x
         self.y = y
         self.radius = radius
-        self.speed = speed
+        self.speed = 0
         self.color = color
+        self.deceleration = deceleration
+
+        self.xSpeed, self.ySpeed = 0, 0
+        self.counter = 0
 
 
-    def draw (self, screen):
+    def updateAndDraw (self, screen):
+        
+        newSpeed = self.speed - self.deceleration
+        if newSpeed > 0:
+
+            self.xSpeed *= (newSpeed/self.speed)
+            self.ySpeed *= (newSpeed/self.speed)
+            self.speed = newSpeed
+
+            self.updatePosition(self.x + self.xSpeed, self.y + self.ySpeed)
+        else:
+            self.speed = 0
+
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
 
+
+    def updatePosition(self, newX, newY):
+
+        if newX - self.radius <= consts.GOALPOSTS_DEPTH: #Goalposts.hasTouchedLeftGoalpost(self.x, self.y, self.radius)
+            self.x = self.radius + consts.GOALPOSTS_DEPTH
+            self.xSpeed = -self.xSpeed
+            # if self.y == player.y:
+            #     player.x = 2*self.radius + player.radius
+        elif newX + self.radius >= consts.SCREEN_WIDTH - consts.GOALPOSTS_DEPTH:
+            self.x = consts.SCREEN_WIDTH - self.radius - consts.GOALPOSTS_DEPTH
+            self.xSpeed = -self.xSpeed
+            # if self.y == player.y:
+            #     player.x = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
+        else:
+            self.x = newX
+
+        if newY - self.radius <= 0:
+            self.y = self.radius
+            self.ySpeed = -self.ySpeed
+            # if self.x == player.x:
+            #     player.y = 2*self.radius + player.radius
+        elif newY + self.radius >= consts.SCREEN_HEIGHT:
+            self.y = consts.SCREEN_HEIGHT - self.radius
+            self.ySpeed = -self.ySpeed
+            # if self.y == player.y:
+            #     player.y = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
+        else:
+            self.y = newY      
+
+
     
-    def hadlePlayerTouch(self, player):
+    def handlePlayerTouch(self, player):
         # verificar se Player tocou na bola:
         minDist = self.radius + player.radius
         dist = math.hypot(self.x - player.x, self.y - player.y)
         if dist <= minDist: # Jogador está tocando na bola
+            self.speed = player.kickSpeed
+
             xD = self.x - player.x
             yD = self.y - player.y
 
             newXD = minDist * xD/dist
             newYD = minDist * yD/dist
 
+            self.updatePosition(player.x + newXD, player.y + newYD)
 
-            newX = player.x + newXD
-            newY = player.y + newYD
-
-            #essa parte ficará em uma função separada, para verificar sempre que a bola estiver em movimento
-            if newX - self.radius <= 0:
-                self.x = self.radius
-                if self.y == player.y:
-                    player.x = 2*self.radius + player.radius
-            elif newX + self.radius >= consts.SCREEN_WIDTH:
-                self.x = consts.SCREEN_WIDTH - self.radius
-                if self.y == player.y:
-                    player.x = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
-            else:
-                self.x = newX
-
-            if newY - self.radius <= 0:
-                self.y = self.radius
-                if self.x == player.x:
-                    player.y = 2*self.radius + player.radius
-            elif newY + self.radius >= consts.SCREEN_HEIGHT:
-                self.y = consts.SCREEN_HEIGHT - self.radius
-                if self.y == player.y:
-                    player.y = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
-            else:
-                self.y = newY            
-
-
-            Vx = self.speed * (self.x - player.x) / dist
-            Vy = self.speed * (self.y - player.y) / dist
+            self.xSpeed = self.speed * (self.x - player.x) / dist
+            self.ySpeed = self.speed * (self.y - player.y) / dist
 
 
 
+class Goalposts:
+    def __init__(self, screen, size = consts.GOALPOSTS_SIZE, depth = consts.GOALPOSTS_DEPTH):
+        self.screen = screen
+        self.size = size
+        self.depth = depth
 
-# def handleCircleColision(c1, c2): # c1: stopped; c2: moving
-#     minDist = c1.radius + c2.radius
-#     dist = math.hypot(c1.x - c2.x, c1.y - c2.y)
-#     if dist <= minDist: # Jogador está tocando na bola
-#         xD = c1.x - c2.x
-#         yD = c1.y - c2.y
+        self.startY = consts.SCREEN_HEIGHT/2 - self.size/2
+        self.finalY = consts.SCREEN_HEIGHT/2 + self.size/2
+        #self.leftGoalpost = 
 
-#         newXD = minDist * xD/dist
-#         newYD = minDist * yD/dist
+    
+    def drawGoalposts(self):
+        
 
+        # Left goalpost
+        pygame.draw.line(self.screen, consts.WHITE,
+            (self.depth - 6, self.startY), (self.depth - 6, self.finalY), 6)
+        pygame.draw.rect(self.screen, consts.BLACK, 
+            (0, 0, self.depth, self.startY))
+        pygame.draw.rect(self.screen, consts.BLACK, 
+                (0, self.finalY, self.depth, consts.SCREEN_HEIGHT))
+        
 
-#         newX = c2.x + newXD
-#         newY = c2.y + newYD
+        # Right goalpost
+        pygame.draw.line(self.screen, consts.WHITE,
+            (consts.SCREEN_WIDTH - self.depth + 6, self.startY), 
+            (consts.SCREEN_WIDTH - self.depth + 6, self.finalY), 6)
+        pygame.draw.rect(self.screen, consts.BLACK, 
+            (consts.SCREEN_WIDTH - self.depth, 0, consts.SCREEN_WIDTH, self.startY))
+        pygame.draw.rect(self.screen, consts.BLACK, 
+            (consts.SCREEN_WIDTH - self.depth, self.finalY, consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT))
 
-#         #essa parte ficará em uma função separada, para verificar sempre que a bola estiver em movimento
-#         if newX - c1.radius <= 0:
-#             c1.x = c1.radius
-#             if c1.y == c2.y:
-#                 c2.x = 2*c1.radius + c2.radius
-#         elif newX + c1.radius >= consts.SCREEN_WIDTH:
-#             c1.x = consts.SCREEN_WIDTH - c1.radius
-#             if c1.y == c2.y:
-#                 c2.x = consts.SCREEN_WIDTH - (2*c1.radius + c2.radius)
-#         else:
-#             c1.x = newX
-
-#         if newY - c1.radius <= 0:
-#             c1.y = c1.radius
-#             if c1.x == c2.x:
-#                 c2.y = 2*c1.radius + c2.radius
-#         elif newY + c1.radius >= consts.SCREEN_HEIGHT:
-#             c1.y = consts.SCREEN_HEIGHT - c1.radius
-#             if c1.y == c2.y:
-#                 c2.y = consts.SCREEN_WIDTH - (2*c1.radius + c2.radius)
-#         else:
-#             c1.y = newY          
-
-
-#         Vx = c1.speed * (c1.x - c2.x) / dist
-#         Vy = c1.speed * (c1.y - c2.y) / dist
+    @staticmethod
+    def hasTouchedLeftGoalpost(self, x, y, radius):
+        xCond = x - radius <= self.depth
+        yCond = y - radius <= self.startY or y + radius >= self.finalY
+        return xCond and yCond
