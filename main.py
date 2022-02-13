@@ -7,16 +7,19 @@ import utils
 pygame.init()
 clock = pygame.time.Clock()
 
-sysFonte = pygame.font.SysFont("Arial", 20, True, False)
+sysFont = pygame.font.SysFont("Arial", 20, True, False)
 screen = pygame.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT))
 pygame.display.set_caption("Avengers Infinity Soccer")
 
 
-# Creating objects
-p1 = Player(700,40, 40, 10, consts.RED, 10)
-p2 = Player(100,consts.SCREEN_HEIGHT/2, 40, 10, consts.BLUE, 10)
+# Creating objects - Initial values
+p1 = Player(consts.SCREEN_WIDTH/2 + 200,consts.SCREEN_HEIGHT/2, 40, 10, consts.RED, 10)
+p2 = Player(consts.SCREEN_WIDTH/2 - 200,consts.SCREEN_HEIGHT/2, 40, 10, consts.BLUE, 10)
 goalposts = Goalposts(screen)
-ball = Ball(consts.SCREEN_WIDTH/2, 40, 20, consts.WHITE, 0.08, goalposts)
+ball = Ball(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2, 20, consts.WHITE, 0.08, goalposts)
+
+
+
 
 while True:
 
@@ -25,9 +28,13 @@ while True:
             pygame.quit()
             sys.exit()
     
+
     p1.events(pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
     p2.events(pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d)
     
+
+    # Game logic -------------------
+    ball.update()
     p1.handleTouchOtherPlayer(p2)
     p2.handleTouchOtherPlayer(p1)
 
@@ -35,27 +42,31 @@ while True:
     utils.handleBothSidesBallTouch(p2, ball, goalposts)
 
     
-    #ball.handlePlayerTouch(p2)
-
-    # p1.handleBothSidesBallTouch(ball, goalposts)
-    # p2.handleBothSidesBallTouch(ball, goalposts)
-
-    ball.resetIsTouching()
     
 
-    #Visuals
-    screen.fill(consts.BG_COLOR) # preenche toda a tela com a cor, "limpa"
+    # Visuals ----------------------
+    screen.fill(consts.BG_COLOR)
     pygame.draw.line(screen, consts.WHITE, (consts.SCREEN_WIDTH/2, 0), (consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT), 6)
-
     
     goalposts.drawGoalposts()
-    ball.updateAndDraw(screen)
+    ball.draw(screen)
     p1.draw(screen)
     p2.draw(screen)
+
+    utils.drawTopMenu(screen, p1, p2, sysFont)
+
+
+    # Goal verification ---------
+    if ball.hasTouchedLeftGoal():
+        utils.goal(1, p1, p2, screen)
+        utils.setToInitialState(p1, p2, ball)
+        
+    if ball.hasTouchedRightGoal():
+        utils.goal(2, p1, p2, screen)
+        utils.setToInitialState(p1, p2, ball)
     
 
-    # screen.blit(oScore, (30, 10))
-    # screen.blit(pScore, (screen_width-100, 10))
+    ball.resetIsTouching()
     
 
     pygame.display.flip()

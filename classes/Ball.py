@@ -1,11 +1,14 @@
 import math
 from tkinter.tix import Tree
+from turtle import speed
 import pygame, consts
 
 class Ball:
     def __init__(self, x, y, radius, color, deceleration, goalposts):
         self.x = x
         self.y = y
+        self.initialX = x
+        self.initialY = y
         self.radius = radius
         self.speed = 0
         self.color = color
@@ -23,8 +26,15 @@ class Ball:
         self.xSpeed, self.ySpeed = 0, 0
         self.counter = 0
 
+    def setToInitialPosition(self):
+        self.x = self.initialX
+        self.y = self.initialY
+        self.speed = 0
 
-    def updateAndDraw (self, screen):
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+
+    def update (self):
         
         newSpeed = self.speed - self.deceleration
         if newSpeed > 0:
@@ -37,84 +47,56 @@ class Ball:
         else:
             self.speed = 0
 
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
 
 
     def updatePosition(self, newX, newY):
 
-        if self.goalposts.hasTouchedLeftGoalpost(self.x, self.y, self.radius):#newX - self.radius <= consts.GOALPOSTS_DEPTH:
-            self.x = self.radius + consts.GOALPOSTS_DEPTH +1
-            # self.isTouching['left'] = True
+        if self.goalposts.hasTouchedLeftGoalpost(newX, newY, self.radius): #self.isTouching['left']:
+
+            self.x = self.radius + self.goalposts.depth + 1
+            #self.x += self.speed
+            #self.isTouching['left'] = True
             self.xSpeed = -self.xSpeed
-            # if self.y == player.y:
-            #     player.x = 2*self.radius + player.radius
-        elif self.goalposts.hasTouchedRightGoalpost(self.x, self.y, self.radius):#newX + self.radius >= consts.SCREEN_WIDTH - consts.GOALPOSTS_DEPTH:
-            self.x = consts.SCREEN_WIDTH - self.radius - consts.GOALPOSTS_DEPTH -1
-            # self.isTouching['Right'] = True
+        elif self.goalposts.hasTouchedRightGoalpost(self.x, self.y, self.radius):
+            self.x = consts.SCREEN_WIDTH - self.radius - self.goalposts.depth - 1
+            #self.x -= self.speed
+            #self.isTouching['Right'] = True
             self.xSpeed = -self.xSpeed
-            # if self.y == player.y:
-            #     player.x = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
         else:
             self.x = newX
 
-        if newY - self.radius <= 0:
-            self.y = self.radius
+        if newY - self.radius <= consts.TOP_MENU_HEIGHT:
+            self.y = self.radius + consts.TOP_MENU_HEIGHT
             self.ySpeed = -self.ySpeed
-            # if self.x == player.x:
-            #     player.y = 2*self.radius + player.radius
         elif newY + self.radius >= consts.SCREEN_HEIGHT:
             self.y = consts.SCREEN_HEIGHT - self.radius
             self.ySpeed = -self.ySpeed
-            # if self.y == player.y:
-            #     player.y = consts.SCREEN_WIDTH - (2*self.radius + player.radius)
         else:
             self.y = newY      
 
 
     
-    def handlePlayerTouch(self, player):
-        # verificar se Player tocou na bola:
-        minDist = self.radius + player.radius
-        dist = math.hypot(self.x - player.x, self.y - player.y)
-        # if dist <= minDist: # Jogador está tocando na bola
-            # player.isTouchingBall = True
-        #if player.isTouchingBall:
-
-
-            # if player.x < self.x and player.y == self.y:
-            #     self.isTouching['left'] = True
-            # elif player.x > self.x and player.y == self.y:
-            #     self.isTouching['right'] = True
-
-            # if player.y < self.y and player.x == self.x:
-            #     self.isTouching['bottom'] = True
-            # elif player.y > self.y and player.x == self.x:
-            #     self.isTouching['top'] = True
-
-
+    def handlePlayerTouch(self, player, minDist, dist):
         if self.isBlocked:
             self.speed = 0
             
         else:
             self.speed = player.kickSpeed
         
-        print(self.speed)
+            #print(self.speed)
+            #print("dist",dist)
 
-        xD = self.x - player.x
-        yD = self.y - player.y
+            xD = self.x - player.x
+            yD = self.y - player.y
 
-        newXD = minDist * xD/dist
-        newYD = minDist * yD/dist
+            newXD = minDist * xD/dist
+            newYD = minDist * yD/dist
 
-        self.xSpeed = self.speed * (self.x - player.x) / dist
-        self.ySpeed = self.speed * (self.y - player.y) / dist
+            self.xSpeed = self.speed * (self.x - player.x) / dist
+            self.ySpeed = self.speed * (self.y - player.y) / dist
 
-        self.updatePosition(player.x + newXD, player.y + newYD)
+            self.updatePosition(player.x + newXD, player.y + newYD)
 
-
-        # else:
-        #     player.isTouchingBall = False
-           
             
     def resetIsTouching(self, fill = False):
         self.isTouching = {
@@ -123,3 +105,9 @@ class Ball:
             'bottom': fill,
             'left': fill
         }
+
+    def hasTouchedLeftGoal(self):
+        return (self.x - self.radius <= 0) and not self.goalposts.hasTouchedLeftGoalpost(self.x, self.y, self.radius)
+    
+    def hasTouchedRightGoal(self):
+        return self.x + self.radius >= consts.SCREEN_WIDTH and not self.goalposts.hasTouchedRightGoalpost(self.x, self.y, self.radius)

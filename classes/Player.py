@@ -2,17 +2,23 @@ import math
 import pygame, consts
 
 class Player:
-    def __init__(self, x, y, radius, speed, color, kickSpeed):
+    def __init__(self, x, y, radius, speed, color, kickSpeed, score=0):
         self.x = x
         self.y = y
+        self.xInitial = x
+        self.yInitial = y
         self.radius = radius
         self.speed = speed
         self.color = color
         self.kickSpeed = kickSpeed
         self.isTouchingBall = False
+        self.score = score
 
         self.isMoving = False
         
+    def setToInitialPosition(self):
+        self.x = self.xInitial
+        self.y = self.yInitial
 
     def draw (self, screen):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
@@ -42,8 +48,8 @@ class Player:
         else:
             self.x = newX
 
-        if newY - self.radius < 0:
-            self.y = self.radius
+        if newY - self.radius < consts.TOP_MENU_HEIGHT:
+            self.y = self.radius + consts.TOP_MENU_HEIGHT
         elif newY + self.radius > consts.SCREEN_HEIGHT:
             self.y = consts.SCREEN_HEIGHT - self.radius
         else:
@@ -74,18 +80,3 @@ class Player:
 
 
         self.updatePosition(self.x + xInc, self.y + yInc)
-
-
-    # def handleBothSidesBallTouch(self, ball, goalposts):
-    #     if self.isTouchingBall:
-    #         if (ball.isTouching["left"] and ball.isTouching["right"]):
-    #             if (self.x > ball.x):
-    #                 self.x = ball.x + ball.radius + self.radius
-    #             else:
-    #                 self.x = ball.x - ball.radius - self.radius
-            
-    #         if (ball.isTouching["top"] and ball.isTouching["bottom"]):
-    #             if (self.y > ball.y):
-    #                 self.y = ball.y + ball.radius + self.radius
-    #             else:
-    #                 self.y = ball.y - ball.radius - self.radius
