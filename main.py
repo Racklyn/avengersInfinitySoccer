@@ -1,4 +1,8 @@
-import pygame, sys, consts, sprites
+import pygame, sys, consts
+from classes.Player import Player
+from classes.Ball import Ball
+from classes.Goalposts import Goalposts
+import utils
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -9,10 +13,10 @@ pygame.display.set_caption("Avengers Infinity Soccer")
 
 
 # Creating objects
-p1 = sprites.Player(100,consts.SCREEN_HEIGHT/2, 40, 10, consts.RED, 10)
-p2 = sprites.Player(700,consts.SCREEN_HEIGHT/2, 40, 10, consts.BLUE, 10)
-ball = sprites.Ball(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2, 20, consts.WHITE, 0.08)
-goalposts = sprites.Goalposts(screen)
+p1 = Player(700,40, 40, 10, consts.RED, 10)
+p2 = Player(100,consts.SCREEN_HEIGHT/2, 40, 10, consts.BLUE, 10)
+goalposts = Goalposts(screen)
+ball = Ball(consts.SCREEN_WIDTH/2, 40, 20, consts.WHITE, 0.08, goalposts)
 
 while True:
 
@@ -27,16 +31,25 @@ while True:
     p1.handleTouchOtherPlayer(p2)
     p2.handleTouchOtherPlayer(p1)
 
-    ball.handlePlayerTouch(p1)
-    ball.handlePlayerTouch(p2)
+    utils.handleBothSidesBallTouch(p1, ball, goalposts)
+    utils.handleBothSidesBallTouch(p2, ball, goalposts)
+
+    
+    #ball.handlePlayerTouch(p2)
+
+    # p1.handleBothSidesBallTouch(ball, goalposts)
+    # p2.handleBothSidesBallTouch(ball, goalposts)
+
+    ball.resetIsTouching()
     
 
     #Visuals
     screen.fill(consts.BG_COLOR) # preenche toda a tela com a cor, "limpa"
     pygame.draw.line(screen, consts.WHITE, (consts.SCREEN_WIDTH/2, 0), (consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT), 6)
 
-    ball.updateAndDraw(screen)
+    
     goalposts.drawGoalposts()
+    ball.updateAndDraw(screen)
     p1.draw(screen)
     p2.draw(screen)
     
