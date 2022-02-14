@@ -1,6 +1,9 @@
 import pygame, consts
+from windows.SelectP1Menu import SelectP1Menu
+from windows.SelectP2Menu import SelectP2Menu
 from windows.FirstMenu import FirstMenu
 from windows.GameWindow import GameWindow
+from windows.AboutMenu import AboutMenu
 
 
 pygame.init()
@@ -12,7 +15,10 @@ pygame.display.set_caption("Avengers Infinity Soccer")
 
 windowsID = {
     'FIRST_MENU': 0,
-    'GAME_WINDOW': 1
+    'GAME_WINDOW': 1,
+    'ABOUT_MENU': 2,
+    'SELECT_P1_MENU': 3,
+    'SELECT_P2_MENU': 4
 }
 currentWindowID = 0
 
@@ -20,13 +26,26 @@ currentWindowID = 0
 
 firstMenu = FirstMenu(screen, mainFont)
 gameWindow = GameWindow(screen, mainFont)
+aboutMenu = AboutMenu(screen, mainFont)
+selectP1Menu = SelectP1Menu(screen, mainFont)
+selectP2Menu = SelectP2Menu(screen, mainFont)
 
 while True:
 
     if currentWindowID == windowsID['FIRST_MENU']: 
         currentWindowID = firstMenu.open(currentWindowID, windowsID)
+
+    elif currentWindowID == windowsID['SELECT_P1_MENU']:
+        currentWindowID = selectP1Menu.open(currentWindowID, windowsID)
+
+    elif currentWindowID == windowsID['SELECT_P2_MENU']:
+        currentWindowID = selectP2Menu.open(currentWindowID, windowsID)
+
     elif currentWindowID == windowsID['GAME_WINDOW']:
         currentWindowID = gameWindow.open(currentWindowID, windowsID)
+
+    elif currentWindowID == windowsID['ABOUT_MENU']:
+        currentWindowID = aboutMenu.open(currentWindowID, windowsID)
     
     print(currentWindowID)
 
