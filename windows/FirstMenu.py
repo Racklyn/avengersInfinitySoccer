@@ -18,14 +18,16 @@ class FirstMenu():
                 if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
                     if self.option == 0:
                         currentWindowID = windowsID['SELECT_P1_MENU']
+                    elif self.option == 1:
+                        currentWindowID = windowsID['CONTROLS_MENU']
                     elif self.option == 3:
                         currentWindowID = windowsID['ABOUT_MENU']
 
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                     if self.option >= 3: self.option = 0
                     else: self.option +=1
                 
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP or event.key == pygame.K_w:
                     if self.option <= 0: self.option = 3
                     else: self.option -=1
 
@@ -41,7 +43,7 @@ class FirstMenu():
         self.screen.blit(title, text_rect)
 
         self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 200, "Novo jogo", self.option==0)
-        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 300, "Controles *", self.option==1)
+        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 300, "Controles", self.option==1)
         self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 400, "Configurações *", self.option==2)
         self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 500, "Créditos", self.option==3)
 

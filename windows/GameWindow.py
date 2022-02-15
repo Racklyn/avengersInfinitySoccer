@@ -1,4 +1,4 @@
-import consts, utils, pygame, sys, charactersInfo, os
+import consts, utils, pygame, sys, charactersInfo, os, drawingUtils
 from classes.Ball import Ball
 from classes.Goalposts import Goalposts
 from classes.Player import Player
@@ -95,7 +95,7 @@ class GameWindow():
 
         if self.gameSettings['hasGameFinished']:
             
-            self.endGameWindow(self.screen)
+            self.endGameWindow(self.screen, p1Info, p2Info)
             
 
 
@@ -133,7 +133,6 @@ class GameWindow():
 
             # Visuals ----------------------
                 # Field image:
-            #self.screen.fill(consts.BG_COLOR)
             self.screen.blit(self.field, (0,0))
             pygame.draw.line(self.screen, consts.WHITE, (consts.SCREEN_WIDTH/2, 0), (consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT), 6)
             
@@ -191,6 +190,11 @@ class GameWindow():
         text_rect = op2.get_rect(center=(pausedBox.get_width()/2, pausedBox.get_height()/2 + 50))
         pausedBox.blit(op2, text_rect)
 
+        drawingUtils.drawMenuControlHint(
+            screen,
+            'Pressione ENTER para selecionar'
+        )
+
         pausedBox_rect = pausedBox.get_rect(center=(screen.get_width()/2, screen.get_height()/2))
         screen.blit(pausedBox, pausedBox_rect)
 
@@ -199,23 +203,39 @@ class GameWindow():
 
         
 
-    def endGameWindow(self, screen):
+    def endGameWindow(self, screen, p1Info, p2Info):
 
-        endGameBox = pygame.Surface((int(consts.SCREEN_WIDTH/3), int(consts.SCREEN_HEIGHT/3)))
+        endGameBox = pygame.Surface((int(consts.SCREEN_WIDTH/3), int(consts.SCREEN_HEIGHT/3 + 30)))
         endGameBox.fill(consts.BLACK)
 
         font = pygame.font.SysFont(None, 40, True, False)
         title = font.render("FIM DE JOGO !", False, consts.WHITE)
-        text_rect = title.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2 - 20))
+        text_rect = title.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2 - 40))
         endGameBox.blit(title, text_rect)
 
         scoresText = font.render("%d x %d"%(self.p2.score, self.p1.score), False, consts.WHITE)
-        text_rect = scoresText.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2 + 20))
+        text_rect = scoresText.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2))
         endGameBox.blit(scoresText, text_rect)
 
-        font2 = pygame.font.SysFont('Arial', 14, False, False)
-        msg = font2.render("Pressione SPACE / ESC para voltar ao menu", True, consts.LIGHT_GRAY)
-        text_rect = msg.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height() - 30))
+        message = "EMPATE :|"
+        color = consts.WHITE
+        if self.p1.score > self.p2.score:
+            message = "%s GANHOU :)"%p1Info['name']
+            color = p1Info['color']
+            
+        elif self.p1.score < self.p2.score:
+            message = "%s GANHOU :)"%p2Info['name']
+            color = p2Info['color']
+
+
+        font2 = pygame.font.SysFont(None, 30, True, False)
+        msg = font2.render(message, True, color)
+        text_rect = msg.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height() - 70))
+        endGameBox.blit(msg, text_rect)
+
+        font3 = pygame.font.SysFont('Arial', 14, False, False)
+        msg = font3.render("Pressione SPACE / ESC para voltar ao menu", True, consts.LIGHT_GRAY)
+        text_rect = msg.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height() - 20))
         endGameBox.blit(msg, text_rect)
 
         endGameBox_rect = endGameBox.get_rect(center=(screen.get_width()/2, screen.get_height()/2))

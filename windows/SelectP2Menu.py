@@ -26,12 +26,12 @@ class SelectP2Menu():
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE: 
                     currentWindowID = windowsID['GAME_WINDOW']
 
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     if self.option <= 0:
                         self.option = len(charsList) - 1
                     else:
                         self.option -= 1
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     if self.option >= len(charsList) - 1:
                         self.option = 0
                     else:

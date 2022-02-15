@@ -6,7 +6,6 @@ for c in charactersInfo.info:
     image = pygame.image.load(os.path.join(consts.IMAGES_DIR, c['image']))
     image = pygame.transform.scale(image, (consts.CHARS_CARD_WIDTH - 10, consts.CHARS_CARD_WIDTH -10))
     cardImages[c['id']] = image
-    print(c)
 
 
 def drawMenuControlHint(screen, text):

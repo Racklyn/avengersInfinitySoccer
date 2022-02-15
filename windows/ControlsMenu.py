@@ -2,10 +2,11 @@ import pygame, sys, consts
 import drawingUtils
 
 
-class AboutMenu():
+class ControlsMenu():
     def __init__(self, screen, mainFont):
         self.screen = screen
         self.mainFont = mainFont
+        self.font1 = pygame.font.SysFont('Arial', 18, True, False)
 
     def open(self, currentWindowID, windowsID):
         # Events
@@ -27,23 +28,37 @@ class AboutMenu():
 
 
         font = pygame.font.SysFont(None, 40, True, True)
-        title = font.render("CRÉDITOS", True, consts.WHITE)
+        title = font.render("CONTROLES", True, consts.WHITE)
         text_rect = title.get_rect(center=(consts.SCREEN_WIDTH/2, 50))
         self.screen.blit(title, text_rect)
 
 
         texts = [
-            "Desenvolvido por: Francisco Racklyn Sotero dos Santos",
-            "Aluno do 1° período em Ciência da Computação - UFAL Arapiraca",
-            "14 de fevereiro de 2022",
+            "Controles Player 1",
+            "SETAS: ← → ↑ ↓",
+            "Controles Player 2",
+            "TECLAS: A, W, S e D",
+            "Outros",
+            "Pausar o jogo: SPACE/ESC"
         ]
 
-        offSet = -30
-        for t in texts:
-            title = self.mainFont.render(t, True, consts.BLACK)
-            text_rect = title.get_rect(center=(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2 + offSet))
-            self.screen.blit(title, text_rect)
-            offSet += 40
+        offSet = -80
+        for i, t in enumerate(texts):
+            font = self.font1
+            color = consts.BLACK
+            incOffSet = 60
+            if i%2==0:
+                font = self.mainFont
+                color = consts.WHITE
+                incOffSet = 40
+            
+            text = font.render(t, True, color)
+            text_rect = text.get_rect(center=(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2 + offSet))
+            self.screen.blit(text, text_rect)
+            offSet += incOffSet
+
+
+        
 
         drawingUtils.drawMenuControlHint(self.screen,
             "Pressione qualquer TECLA para voltar"
