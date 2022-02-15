@@ -42,6 +42,9 @@ class GameWindow():
         self.p1.color = p1Info['color']
         self.p2.color = p2Info['color']
 
+        self.p1.setAndLoadImage(p1Info['image'])
+        self.p2.setAndLoadImage(p2Info['image'])
+
         utils.setToInitialState(self.p1, self.p2, self.ball)
 
 
@@ -123,7 +126,7 @@ class GameWindow():
             self.ball.resetIsTouching()
 
             self.timer, self.counter = utils.updateGameTimer(self.timer, self.counter)
-            if self.timer > 90:
+            if self.timer >= 90:
                 self.gameSettings['hasGameFinished'] = True
 
 

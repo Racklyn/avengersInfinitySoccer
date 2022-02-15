@@ -56,7 +56,7 @@ class SelectP2Menu():
 
 
         drawingUtils.drawMenuControlHint(self.screen,
-            "ENTER - confirmar   ESC/B - voltar   ↑ - subir   ↓ - descer"
+            "ENTER - Iniciar jogo   ESC/B - voltar   ← esquerda   → direita"
         )
 
 

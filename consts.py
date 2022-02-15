@@ -9,6 +9,7 @@ IMAGES_DIR = os.path.join(os.getcwd(), 'images')
 
 #Colors:
 BG_COLOR = (0,210,50)
+YELLOW = (255,200,0)
 RED = (255,0,0)
 BLUE = (0, 0, 255)
 GREEN = (0,100,30)

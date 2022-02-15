@@ -51,7 +51,6 @@ while True:
     elif currentWindowID == windowsID['ABOUT_MENU']:
         currentWindowID = aboutMenu.open(currentWindowID, windowsID)
     
-    print(player1Char)
 
 
     pygame.display.flip()
