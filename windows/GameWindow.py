@@ -206,19 +206,19 @@ class GameWindow():
     def endGameWindow(self, screen, p1Info, p2Info):
 
         endGameBox = pygame.Surface((int(consts.SCREEN_WIDTH/3), int(consts.SCREEN_HEIGHT/3 + 30)))
-        endGameBox.fill(consts.BLACK)
+        endGameBox.fill(consts.WHITE)
 
         font = pygame.font.SysFont(None, 40, True, False)
-        title = font.render("FIM DE JOGO !", False, consts.WHITE)
+        title = font.render("FIM DE JOGO !", False, consts.BLACK)
         text_rect = title.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2 - 40))
         endGameBox.blit(title, text_rect)
 
-        scoresText = font.render("%d x %d"%(self.p2.score, self.p1.score), False, consts.WHITE)
+        scoresText = font.render("%d x %d"%(self.p2.score, self.p1.score), False, consts.BLACK)
         text_rect = scoresText.get_rect(center=(endGameBox.get_width()/2, endGameBox.get_height()/2))
         endGameBox.blit(scoresText, text_rect)
 
         message = "EMPATE :|"
-        color = consts.WHITE
+        color = consts.BLACK
         if self.p1.score > self.p2.score:
             message = "%s GANHOU :)"%p1Info['name']
             color = p1Info['color']

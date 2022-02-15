@@ -62,7 +62,7 @@ def goal(goalP, p1, p2, screen):
     # Draw goal window
     goalBox = pygame.Surface((int(consts.SCREEN_WIDTH/2), int(consts.SCREEN_HEIGHT/2)))
     goalBox.set_alpha(230)
-    goalBox.fill(consts.BLACK)
+    goalBox.fill(consts.WHITE)
     
     # pygame.draw.rect(screen, consts.WHITE, 
     #     (100, 100, consts.SCREEN_WIDTH - 200, consts.TOP_MENU_HEIGHT - 200))
@@ -73,7 +73,7 @@ def goal(goalP, p1, p2, screen):
     goalBox.blit(msg, text_rect)
 
     font = pygame.font.SysFont(None, 40, True, False)
-    scoresText = font.render("%d x %d"%(p2.score, p1.score), False, consts.WHITE)
+    scoresText = font.render("%d x %d"%(p2.score, p1.score), False, consts.GRAY)
     text_rect = scoresText.get_rect(center=(goalBox.get_width()/2, goalBox.get_height()/2 + 20))
     goalBox.blit(scoresText, text_rect)
 
