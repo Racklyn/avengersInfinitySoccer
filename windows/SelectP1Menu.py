@@ -1,4 +1,4 @@
-import pygame, sys, consts
+import pygame, sys, consts, charactersInfo
 import drawingUtils
 
 
@@ -8,7 +8,7 @@ class SelectP1Menu():
         self.mainFont = mainFont
         self.option = 0
 
-    def open(self, currentWindowID, windowsID):
+    def open(self, currentWindowID, windowsID, player1Char):
         # Events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -22,6 +22,16 @@ class SelectP1Menu():
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE: 
                     currentWindowID = windowsID['SELECT_P2_MENU']
 
+                if event.key == pygame.K_LEFT:
+                    if self.option <= 0:
+                        self.option = len(charactersInfo.info) - 1
+                    else:
+                        self.option -= 1
+                if event.key == pygame.K_RIGHT:
+                    if self.option >= len(charactersInfo.info) - 1:
+                        self.option = 0
+                    else:
+                        self.option += 1
 
 
         # Visuals -----------------
@@ -35,13 +45,15 @@ class SelectP1Menu():
         self.screen.blit(title, text_rect)
 
 
+        # Characters card container ------
+        drawingUtils.drawCharactersCardContainer(self.screen, charactersInfo.info, self.option)
+
+
         drawingUtils.drawMenuControlHint(self.screen,
-            "ENTER - confirmar   ESC/B - voltar   ↑ - subir   ↓ - descer"
+            "ENTER - confirmar   ESC/B - voltar   ← esquerda   → direita"
         )
 
-
-
-        return currentWindowID
+        return currentWindowID, self.option
 
 
     

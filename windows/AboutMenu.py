@@ -16,8 +16,7 @@ class AboutMenu():
                 sys.exit()
             
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN:
-                    currentWindowID = windowsID['FIRST_MENU']
+                currentWindowID = windowsID['FIRST_MENU']
                     
 
 

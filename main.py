@@ -23,6 +23,10 @@ windowsID = {
 currentWindowID = 0
 
 
+player1Char = 0
+player2Char = 1
+
+
 
 firstMenu = FirstMenu(screen, mainFont)
 gameWindow = GameWindow(screen, mainFont)
@@ -36,18 +40,18 @@ while True:
         currentWindowID = firstMenu.open(currentWindowID, windowsID)
 
     elif currentWindowID == windowsID['SELECT_P1_MENU']:
-        currentWindowID = selectP1Menu.open(currentWindowID, windowsID)
+        currentWindowID, player1Char = selectP1Menu.open(currentWindowID, windowsID, player1Char)
 
     elif currentWindowID == windowsID['SELECT_P2_MENU']:
-        currentWindowID = selectP2Menu.open(currentWindowID, windowsID)
+        currentWindowID, player2Char = selectP2Menu.open(currentWindowID, windowsID, player1Char, player2Char)
 
     elif currentWindowID == windowsID['GAME_WINDOW']:
-        currentWindowID = gameWindow.open(currentWindowID, windowsID)
+        currentWindowID = gameWindow.open(currentWindowID, windowsID, player1Char, player2Char)
 
     elif currentWindowID == windowsID['ABOUT_MENU']:
         currentWindowID = aboutMenu.open(currentWindowID, windowsID)
     
-    print(currentWindowID)
+    print(player1Char)
 
 
     pygame.display.flip()

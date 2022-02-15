@@ -41,8 +41,8 @@ class FirstMenu():
         self.screen.blit(title, text_rect)
 
         self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 200, "Novo jogo", self.option==0)
-        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 300, "Controles", self.option==1)
-        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 400, "Configurações", self.option==2)
+        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 300, "Controles *", self.option==1)
+        self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 400, "Configurações *", self.option==2)
         self.drawButton(self.screen, consts.SCREEN_WIDTH/2, 500, "Créditos", self.option==3)
 
         drawingUtils.drawMenuControlHint(self.screen,

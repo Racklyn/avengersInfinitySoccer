@@ -1,4 +1,4 @@
-import consts, utils, pygame, sys
+import consts, utils, pygame, sys, charactersInfo
 from classes.Ball import Ball
 from classes.Goalposts import Goalposts
 from classes.Player import Player
@@ -7,10 +7,13 @@ class GameWindow():
     def __init__(self, screen, mainFont):
         self.screen = screen
         self.mainFont = mainFont
+        self.isStarting = True
 
         # Creating objects - Initial values
-        self.p1 = Player(consts.SCREEN_WIDTH/2 + 200, consts.SCREEN_HEIGHT/2 + 1, 40, 10, consts.RED, 10)
-        self.p2 = Player(consts.SCREEN_WIDTH/2 - 200, consts.SCREEN_HEIGHT/2 + 1, 40, 10, consts.BLUE, 10)
+        self.p1 = Player(consts.SCREEN_WIDTH/2 + 200, consts.SCREEN_HEIGHT/2 + 1,
+                         40, 10, consts.BLACK, 10)
+        self.p2 = Player(consts.SCREEN_WIDTH/2 - 200, consts.SCREEN_HEIGHT/2 + 1,
+                         40, 10, consts.WHITE, 10)
         self.goalposts = Goalposts(self.screen)
         self.ball = Ball(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2, 20, consts.WHITE, 0.08, self.goalposts)
         
@@ -24,16 +27,28 @@ class GameWindow():
         self.timer = 0
         self.counter = 0
     
-    def startGameSettings(self):
+    def startGameSettings(self, p1Info, p2Info):
         self.timer = 0 
         self.counter = 0
 
         self.p1.score = 0
         self.p2.score = 0
+
+        self.p1.color = p1Info['color']
+        self.p2.color = p2Info['color']
+
         utils.setToInitialState(self.p1, self.p2, self.ball)
 
 
-    def open(self, currentWindowID, windowsID):
+    def open(self, currentWindowID, windowsID, player1Char, player2Char):
+
+        p1Info = charactersInfo.info[player1Char]
+        p2Info = charactersInfo.info[player2Char]
+
+        if self.isStarting:
+            self.startGameSettings(p1Info, p2Info)
+            self.isStarting = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -43,7 +58,8 @@ class GameWindow():
                 if event.key == pygame.K_SPACE or event.key == pygame.K_ESCAPE:
                     if self.gameSettings['hasGameFinished']:
                         currentWindowID = windowsID['FIRST_MENU']
-                        self.startGameSettings()
+                        self.startGameSettings(p1Info, p2Info)
+                        self.isStarting = True
 
                         self.gameSettings['hasGameFinished'] = False
                     elif not self.gameSettings['isGamePaused']:
@@ -116,7 +132,7 @@ class GameWindow():
             self.p2.draw(self.screen)
 
             
-            self.drawTopMenu(self.screen)
+            self.drawTopMenu(self.screen, p1Info, p2Info)
 
             
         return  currentWindowID
@@ -125,15 +141,15 @@ class GameWindow():
 
 
 
-    def drawTopMenu(self, screen):
+    def drawTopMenu(self, screen, p1Info, p2Info):
         pygame.draw.rect(screen, consts.WHITE, 
             (0, 0, consts.SCREEN_WIDTH, consts.TOP_MENU_HEIGHT))
 
-        p2ScoreText = self.mainFont.render("P2: %d"%self.p2.score, False, self.p2.color)
-        p2Score_rect = p2ScoreText.get_rect(center=(80, consts.TOP_MENU_HEIGHT/2))
+        p2ScoreText = self.mainFont.render("%s: %d"%(p2Info['name'], self.p2.score), False, self.p2.color)
+        p2Score_rect = p2ScoreText.get_rect(center=(consts.SCREEN_WIDTH/4, consts.TOP_MENU_HEIGHT/2))
 
-        p1coreScore = self.mainFont.render("P1: %d"%self.p1.score, False, self.p1.color)
-        p1Score_rect = p1coreScore.get_rect(center=(consts.SCREEN_WIDTH - 80,  consts.TOP_MENU_HEIGHT/2))
+        p1coreScore = self.mainFont.render("%s: %d"%(p1Info['name'], self.p1.score), False, self.p1.color)
+        p1Score_rect = p1coreScore.get_rect(center=(3*consts.SCREEN_WIDTH/4,  consts.TOP_MENU_HEIGHT/2))
 
         timerText = self.mainFont.render("%d:00 min."%self.timer, False, consts.GRAY)
         timer_rect = timerText.get_rect(center=(consts.SCREEN_WIDTH/2,  consts.TOP_MENU_HEIGHT/2))
