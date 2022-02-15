@@ -9,10 +9,10 @@ Para rodar o jogo em seu computador, é necessário ter instalado Python 3 e a b
 Clone o reposítório em seu computador e execute o projeto, seguindo os comando abaixo:
 ```shell
 #Clonar 
-$ git clone https://github.com/Racklyn/avengersinfinitysoccer
+$ git clone https://github.com/Racklyn/avengersInfinitySoccer
 $ cd avengersInfinitySoccer
 #Iniciar o projeto
-$ main.py
+$ python3 main.py
 ```
 README completo em breve (...)
 
