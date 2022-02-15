@@ -1,7 +1,4 @@
-import math
-from tkinter.tix import Tree
-from turtle import speed
-import pygame, consts
+import pygame, consts, os
 
 class Ball:
     def __init__(self, x, y, radius, color, deceleration, goalposts):
@@ -15,6 +12,9 @@ class Ball:
         self.deceleration = deceleration
         self.isBlocked = False
         self.goalposts = goalposts
+
+        ballImage = pygame.image.load(os.path.join(consts.IMAGES_DIR, 'ball01.png'))
+        self.ballImage = pygame.transform.scale(ballImage, (self.radius*2, self.radius*2))
 
         self.isTouching = {
             'top': False,
@@ -31,8 +31,11 @@ class Ball:
         self.y = self.initialY
         self.speed = 0
 
+
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+        screen.blit(self.ballImage, (self.x - self.radius, self.y - self.radius))
+        #pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+
 
     def update (self):
         

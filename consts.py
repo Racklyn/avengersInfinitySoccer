@@ -1,7 +1,11 @@
+import os
+
 SCREEN_WIDTH = 1040
 SCREEN_HEIGHT = 640
 
 FPS = 60
+
+IMAGES_DIR = os.path.join(os.getcwd(), 'images')
 
 #Colors:
 BG_COLOR = (0,210,50)

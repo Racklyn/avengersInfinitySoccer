@@ -1,4 +1,4 @@
-import consts, utils, pygame, sys, charactersInfo
+import consts, utils, pygame, sys, charactersInfo, os
 from classes.Ball import Ball
 from classes.Goalposts import Goalposts
 from classes.Player import Player
@@ -17,6 +17,11 @@ class GameWindow():
         self.goalposts = Goalposts(self.screen)
         self.ball = Ball(consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT/2, 20, consts.WHITE, 0.08, self.goalposts)
         
+
+        field = pygame.image.load(os.path.join(consts.IMAGES_DIR, 'field01.png')).convert()
+        self.field = pygame.transform.scale(field, (consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT))
+
+
 
         self.gameSettings = {
             'isGamePaused': False,
@@ -122,8 +127,11 @@ class GameWindow():
                 self.gameSettings['hasGameFinished'] = True
 
 
+
             # Visuals ----------------------
-            self.screen.fill(consts.BG_COLOR)
+                # Field image:
+            #self.screen.fill(consts.BG_COLOR)
+            self.screen.blit(self.field, (0,0))
             pygame.draw.line(self.screen, consts.WHITE, (consts.SCREEN_WIDTH/2, 0), (consts.SCREEN_WIDTH/2, consts.SCREEN_HEIGHT), 6)
             
             self.goalposts.drawGoalposts()
