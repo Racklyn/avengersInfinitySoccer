@@ -30,7 +30,7 @@ player2Char = 1
 
 
 
-firstMenu = FirstMenu(screen, mainFont)
+firstMenu = FirstMenu(screen)
 gameWindow = GameWindow(screen, mainFont)
 aboutMenu = AboutMenu(screen, mainFont)
 selectP1Menu = SelectP1Menu(screen, mainFont)

@@ -8,7 +8,7 @@ FPS = 60
 IMAGES_DIR = os.path.join(os.getcwd(), 'images')
 
 #Colors:
-BG_COLOR = (0,210,50)
+BG_COLOR = (0,250,70)
 YELLOW = (255,200,0)
 RED = (255,0,0)
 BLUE = (0, 0, 255)
@@ -18,7 +18,8 @@ BLACK = (0,0,0)
 GRAY = (50,50,50)
 MID_GRAY = (100,100,100)
 LIGHT_GRAY = (180,180,180)
-FIRST_MENU_BG = (240, 40, 20)
+FIRST_MENU_BG = (50,60,75)
+HIGHLIGHT = (240, 40, 20)
 
 #Mesures
 GOALPOSTS_SIZE = 300

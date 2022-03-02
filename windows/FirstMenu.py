@@ -2,9 +2,8 @@ import pygame, sys, consts, drawingUtils
 
 
 class FirstMenu():
-    def __init__(self, screen, mainFont):
+    def __init__(self, screen):
         self.screen = screen
-        self.mainFont = mainFont
         self.option = 0
 
     def open(self, currentWindowID, windowsID):
@@ -37,7 +36,7 @@ class FirstMenu():
         self.screen.fill(consts.FIRST_MENU_BG)
 
 
-        font = pygame.font.SysFont(None, 40, True, True)
+        font = pygame.font.SysFont('Arial', 40, True, True)
         title = font.render("AVENGERS INFINITY SOCCER", True, consts.WHITE)
         text_rect = title.get_rect(center=(consts.SCREEN_WIDTH/2, 50))
         self.screen.blit(title, text_rect)
@@ -63,7 +62,7 @@ class FirstMenu():
         buttonBox.fill(consts.LIGHT_GRAY)
 
         font = pygame.font.SysFont(None, 30, True, False)
-        btn_text = font.render(text, False, consts.FIRST_MENU_BG if isSelected else consts.GRAY)
+        btn_text = font.render(text, False, consts.HIGHLIGHT if isSelected else consts.GRAY)
         text_rect = btn_text.get_rect(center=(buttonBox.get_width()/2, buttonBox.get_height()/2))
         buttonBox.blit(btn_text, text_rect)
 

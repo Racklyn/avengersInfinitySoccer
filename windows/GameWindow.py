@@ -205,7 +205,7 @@ class GameWindow():
 
     def endGameWindow(self, screen, p1Info, p2Info):
 
-        endGameBox = pygame.Surface((int(consts.SCREEN_WIDTH/3), int(consts.SCREEN_HEIGHT/3 + 30)))
+        endGameBox = pygame.Surface((int(consts.SCREEN_WIDTH/3) + 50, int(consts.SCREEN_HEIGHT/3 + 30)))
         endGameBox.fill(consts.WHITE)
 
         font = pygame.font.SysFont(None, 40, True, False)
