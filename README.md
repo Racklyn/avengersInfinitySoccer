@@ -1,6 +1,6 @@
 # avengersInfinitySoccer ⚽️
 
-<img src="/home/racklyn/Imagens/Captura de tela de 2022-02-15 20-09-38.png" width="70%">
+<img src="https://user-images.githubusercontent.com/52416026/154166764-25aac137-58cb-42b6-a129-e469712f4731.png" width="50%">
 
 Jogo de futebol 2 players com personagens dos Vingadores.
 
@@ -9,10 +9,10 @@ Para rodar o jogo em seu computador, é necessário ter instalado Python 3 e a b
 Clone o reposítório em seu computador e execute o projeto, seguindo os comando abaixo:
 ```shell
 #Clonar 
-$ git clone https://github.com/Racklyn/avengersinfinitysoccer
+$ git clone https://github.com/Racklyn/avengersInfinitySoccer
 $ cd avengersInfinitySoccer
 #Iniciar o projeto
-$ main.py
+$ python3 main.py
 ```
 README completo em breve (...)
 
