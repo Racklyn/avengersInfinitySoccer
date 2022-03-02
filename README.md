@@ -1,6 +1,6 @@
 # Avengers Infinity Soccer ⚽️
 
-<img src="https://user-images.githubusercontent.com/52416026/154166764-25aac137-58cb-42b6-a129-e469712f4731.png" width="50%">
+<img src="https://user-images.githubusercontent.com/52416026/156424985-a5b0ed34-9311-4576-8e63-bfa30f60b785.jpg" width="80%">
 
 **Avengers Infinity Soccer** é um jogo de futebol 2 players com personagens simulando heróis dos Vingadores. O projeto foi criado para um trabalho da disciplina **APC** (Algoritmos e Programação de Computadores), do 1° período de Ciência da Computação na **UFAL** (Universidade Federal de Alagoas), campus Arapiraca. <br>
 Após cada player escolher um herói, os dois se enfrentam numa empolgante partidade de futebol. O joguinho é simples e contém algumas melhorias a serem feitas.
